@@ -1,5 +1,5 @@
 import { NestFactory } from "@nestjs/core";
-import { ValidationPipe } from "@nestjs/common";
+
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 
@@ -7,7 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: "*",
+    origin: "https://ewol-backoffice.vercel.app",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
   });
 
   const config = new DocumentBuilder()
@@ -18,7 +20,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 
-  app.enableCors();
   await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
