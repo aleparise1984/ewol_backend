@@ -3,6 +3,6 @@ export enum Role {
   USER_EWOL = 'ewolUser',
   STUDENT_EWOL = 'ewolStudent',
   CANDIDATE_EWOL = 'ewolCandidate',
-  TUTOR_EWOL = 'ewolTutor',
+  EWOLER = 'ewoler',
   INVESTOR_EWOL = 'ewolInvestor',
 }
