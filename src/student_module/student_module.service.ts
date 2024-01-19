@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import {
   CreateStudentModuleDto,
   UpdateStudentModuleDto,
-} from './dto/student_module.dto';
-import { StudentModule } from './entities/student_module.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+} from "./dto/student_module.dto";
+import { StudentModule } from "./entities/student_module.entity";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class StudentModuleService {
   constructor(
     @InjectRepository(StudentModule)
-    private studentModuleRepository: Repository<StudentModule>,
+    private studentModuleRepository: Repository<StudentModule>
   ) {}
 
   async create(data: CreateStudentModuleDto) {
@@ -19,16 +19,24 @@ export class StudentModuleService {
   }
 
   async findOne(moduleId: number, userId: number) {
-    console.log(moduleId, userId);
-    return await this.studentModuleRepository.findOne({
-      where: { student: { id: userId }, moodule: { id: moduleId } },
-      relations: ['student', 'moodule'],
+    const data = await this.studentModuleRepository.findOne({
+      where: {
+        moodule: { id: moduleId },
+        student: {
+          user: {
+            id: userId,
+          },
+        },
+      },
+      relations: ["student", "moodule", "student.user"],
     });
+
+    return data;
   }
 
   async findAll() {
     return await this.studentModuleRepository.find({
-      relations: ['student', 'moodule'],
+      relations: ["student", "moodule"],
     });
   }
 

@@ -4,11 +4,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from './../../users/entities/users.entity';
-import { Bootcamp } from 'src/bootcamp/entities/bootcamp.entity';
-import { StudentModule } from 'src/student_module/entities/student_module.entity';
-import { StudentClass } from 'src/student_class/entities/student_class.entity';
+} from "typeorm";
+import { User } from "./../../users/entities/users.entity";
+import { Bootcamp } from "src/bootcamp/entities/bootcamp.entity";
+import { StudentModule } from "src/student_module/entities/student_module.entity";
+import { StudentClass } from "src/student_class/entities/student_class.entity";
 
 @Entity()
 export class Student {
@@ -16,7 +16,7 @@ export class Student {
   id: number;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
     nullable: true,
   })
   test_url: string;
@@ -27,7 +27,7 @@ export class Student {
   test_result: boolean;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
     nullable: true,
   })
   typeform_url: string;
@@ -36,10 +36,22 @@ export class Student {
   typeform_result: boolean;
 
   @Column({
-    type: 'varchar',
+    type: "varchar",
+    nullable: true,
+  })
+  video_ask: string;
+
+  @Column({
+    type: "varchar",
     nullable: true,
   })
   feedback: string;
+
+  @Column({
+    type: "jsonb",
+    nullable: true,
+  })
+  empleability: JSON;
 
   @ManyToOne(() => User, (user) => user.students)
   user: User;
