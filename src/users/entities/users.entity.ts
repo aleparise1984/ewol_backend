@@ -1,15 +1,16 @@
-import { Exclude } from 'class-transformer';
-import { Role } from './../../auth/models/roles.model';
+import { Exclude } from "class-transformer";
+import { Role } from "./../../auth/models/roles.model";
 
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { Student } from './../../students/entities/student.entity';
+} from "typeorm";
+import { Student } from "./../../students/entities/student.entity";
 
 @Entity()
 export class User {
@@ -39,10 +40,13 @@ export class User {
   // nonce?: number;
 
   @Column()
+  calendly: string;
+
+  @Column()
   phone: string;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: Role,
   })
   role: Role;

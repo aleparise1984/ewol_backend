@@ -21,7 +21,7 @@ export class StudentsService {
         user: {
           role: Role.CANDIDATE_EWOL,
         },
-        test_result: Not(IsNull()),
+        video_ask: Not(IsNull()),
       },
     });
   }
@@ -57,9 +57,9 @@ export class StudentsService {
 
   async typeformResponse(userForm: string) {
     const formId = "Gh5zui2c";
-    // const apiKey = 'A8PT2zVkPe4QExEGyDCvin1xrRwZwaRRhN2sKerg9PqU';
-    const apiKey =
-      "tfp_H8m8853rN2JUGhJ5tnYHfapLQr1jE7ebNvXXK5UmhqpJ_3sp7nUuAqeYdb8";
+
+    const apiKey = process.env.TYPEFORM_TOKEN;
+    console.log("apiKey: ", apiKey);
 
     const apiUrl = `https://api.typeform.com/forms/${formId}/responses?pageSize=1000`;
 
