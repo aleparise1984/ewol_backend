@@ -39,7 +39,7 @@ export class User {
   // @Column({ default: Math.floor(Math.random() * 10000), nullable: true })
   // nonce?: number;
 
-  @Column()
+  @Column({ nullable: true })
   calendly: string;
 
   @Column()
