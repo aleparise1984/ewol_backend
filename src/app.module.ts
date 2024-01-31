@@ -18,6 +18,7 @@ import { ModuleModule } from './module/module.module';
 import { ClassModule } from './class/class.module';
 import { StudentClassModule } from './student_class/student_class.module';
 import { StudentModuleModule } from './student_module/student_module.module';
+import { UserUserModule } from './user-user/user-user.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { StudentModuleModule } from './student_module/student_module.module';
     ClassModule,
     StudentClassModule,
     StudentModuleModule,
+    UserUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

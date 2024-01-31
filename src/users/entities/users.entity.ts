@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Student } from "./../../students/entities/student.entity";
+import { UserUser } from "src/user-user/entities/user-user.entity";
 
 @Entity()
 export class User {
@@ -33,12 +34,6 @@ export class User {
   @Column()
   password: string;
 
-  // @Column({ unique: true, nullable: true })
-  // publilcAddress?: string;
-
-  // @Column({ default: Math.floor(Math.random() * 10000), nullable: true })
-  // nonce?: number;
-
   @Column({ nullable: true })
   calendly: string;
 
@@ -56,4 +51,7 @@ export class User {
 
   @OneToMany(() => User, (user) => user.students)
   students: Student;
+
+  @OneToMany(() => UserUser, (userUser) => userUser.user)
+  relatedUsers: UserUser[];
 }

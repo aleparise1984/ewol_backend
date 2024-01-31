@@ -1,23 +1,22 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import * as bcrypt from "bcrypt";
+import { JwtService } from "@nestjs/jwt";
 
-import { PayloadToken } from './../models/token.model';
-import { UsersService } from './../../users/users.service';
-import { User } from './../../users/entities/users.entity';
-import { MailService } from './../../mailer/mailer.service';
+import { PayloadToken } from "./../models/token.model";
+import { UsersService } from "./../../users/users.service";
+import { User } from "./../../users/entities/users.entity";
+import { MailService } from "./../../mailer/mailer.service";
 
-import { CreateUserDto } from './../../users/dto/users.dto';
-import { Role } from '../models/roles.model';
+import { CreateUserDto } from "./../../users/dto/users.dto";
+import { Role } from "../models/roles.model";
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private mailService: MailService,
+    private mailService: MailService
   ) {}
-
 
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findOneByEmail(email);
@@ -41,18 +40,21 @@ export class AuthService {
 
   async register(user: CreateUserDto) {
     const { email } = user;
+
     const userExists = await this.usersService.findOneByEmail(email);
     if (userExists)
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException("User already exists", HttpStatus.BAD_REQUEST);
 
     const newUser = await this.usersService.createStudent(user);
     if (!newUser)
-      throw new HttpException('User not created', HttpStatus.BAD_REQUEST);
+      throw new HttpException("User not created", HttpStatus.BAD_REQUEST);
 
-    const userToken = await this.generateJWT(newUser);
+    const userToken = this.generateJWT(newUser);
+
+    console.log("va a enviar el mail");
     await this.mailService.sendUserConfirmation(
       newUser,
-      userToken.access_token,
+      userToken.access_token
     );
     return userToken;
   }
@@ -65,12 +67,12 @@ export class AuthService {
       await this.usersService.update(user.id, user);
       return {
         statusCode: HttpStatus.OK,
-        message: 'Email confirmed',
+        message: "Email confirmed",
       };
     }
     return {
       statusCode: HttpStatus.NOT_FOUND,
-      message: 'User not found',
+      message: "User not found",
     };
   }
 
@@ -79,34 +81,34 @@ export class AuthService {
     if (!user) {
       return {
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'User not found',
+        message: "User not found",
       };
     } else {
       const token = this.generateJWT(user);
       await this.mailService.sendPasswordReset(user, token.access_token);
       return {
         statusCode: HttpStatus.OK,
-        message: 'Email sent',
+        message: "Email sent",
       };
     }
   }
 
   async resetPassword(token: string, password: string) {
-    const pass = await bcrypt.hash(password, 10);
     const payload = this.jwtService.verify(token);
     const user = await this.usersService.findOne(payload.sub);
     if (user) {
-      user.password = pass;
-      console.log('user.pass', user.password);
+      user.password = password;
+
       await this.usersService.update(user.id, user);
+      console.log("se actualizo la contraseña");
       return {
         statusCode: HttpStatus.OK,
-        message: 'Password changed',
+        message: "Password changed",
       };
     }
     return {
       statusCode: HttpStatus.NOT_FOUND,
-      message: 'User not found',
+      message: "User not found",
     };
   }
 
@@ -115,15 +117,15 @@ export class AuthService {
       const decoded = this.jwtService.verify(token);
       return decoded;
     } catch (err) {
-      if (err.name === 'TokenExpiredError') {
+      if (err.name === "TokenExpiredError") {
         return {
           statusCode: HttpStatus.UNAUTHORIZED,
-          message: 'Token expired',
+          message: "Token expired",
         };
       } else {
         return {
           statusCode: HttpStatus.UNAUTHORIZED,
-          message: 'Invalid token',
+          message: "Invalid token",
         };
       }
     }

@@ -1,21 +1,21 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { HttpException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 
-import { DataSource, Repository } from 'typeorm';
-import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
-import { User } from './entities/users.entity';
-import * as bcript from 'bcrypt';
-import { Role } from './../auth/models/roles.model';
+import { DataSource, Repository } from "typeorm";
+import { CreateUserDto, UpdateUserDto } from "./dto/users.dto";
+import { User } from "./entities/users.entity";
+import * as bcript from "bcrypt";
+import { Role } from "./../auth/models/roles.model";
 
-import { Student } from './../students/entities/student.entity';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Student } from "./../students/entities/student.entity";
+import { Public } from "src/auth/decorators/public.decorator";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private dataSource: DataSource,
+    private dataSource: DataSource
   ) {}
 
   async create(payload: CreateUserDto): Promise<User> {
@@ -33,7 +33,7 @@ export class UsersService {
       },
       user: {
         ...payload,
-        phone: '',
+        phone: "",
         password: await bcript.hash(payload.password, 10),
         role: Role.CANDIDATE_EWOL,
       },
@@ -48,14 +48,14 @@ export class UsersService {
         where: { email: payload.email },
       });
       if (user) {
-        throw new HttpException('User already exists', 400);
+        throw new HttpException("User already exists", 400);
       }
 
       const newUser = await queryRunner.manager
         .getRepository(User)
         .save(data.user);
       if (!newUser) {
-        throw new HttpException('User not created', 400);
+        throw new HttpException("User not created", 400);
       }
 
       const newStudent = await queryRunner.manager
@@ -63,7 +63,7 @@ export class UsersService {
         .save({ ...data.students, user: newUser });
 
       if (!newStudent) {
-        throw new HttpException('Student not created', 400);
+        throw new HttpException("Student not created", 400);
       }
       await queryRunner.commitTransaction();
       return await this.findOne(newUser.id);
@@ -102,6 +102,7 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    console.log("entro en el update");
     const user = await this.userRepository.findOne({
       where: { id },
     });
