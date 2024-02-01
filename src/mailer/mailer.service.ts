@@ -15,6 +15,7 @@ export class MailService {
 
   async sendUserConfirmation(user: User, token: string) {
     console.log("entro en el mailer service");
+    console.log("node_env", process.env.NODE_ENV);
     const url =
       process.env.NODE_ENV === "prod"
         ? `https://ewol-backoffice.vercel.app/auth/confirm-email/${token}`
@@ -48,7 +49,8 @@ export class MailService {
   }
 
   async sendPasswordReset(user: User, token: string) {
-    console.log("user en recovery", user);
+    console.log("node_env", process.env.NODE_ENV);
+
     const url =
       process.env.NODE_ENV === "prod"
         ? `https://ewol-backoffice.vercel.app/auth/recovery-password/${token}`
