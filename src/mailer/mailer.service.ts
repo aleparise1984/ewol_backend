@@ -18,7 +18,7 @@ export class MailService {
     console.log("node_env", process.env.NODE_ENV);
     const url =
       process.env.NODE_ENV === "prod"
-        ? `https://ewol-backoffice.vercel.app/auth/confirm-email/${token}`
+        ? `https://ewol-academy-backoffice.vercel.app/auth/confirm-email/${token}`
         : `http://localhost:3000/auth/confirm-email/${token}`;
 
     console.log("url to mailer", url);
@@ -53,7 +53,7 @@ export class MailService {
 
     const url =
       process.env.NODE_ENV === "prod"
-        ? `https://ewol-backoffice.vercel.app/auth/recovery-password/${token}`
+        ? `https://ewol-academy-backoffice.vercel.app/auth/recovery-password/${token}`
         : `http://localhost:3000/auth/recovery-password/${token}`;
 
     await this.mailerService.sendMail({
