@@ -102,7 +102,6 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    console.log("entro en el update");
     const user = await this.userRepository.findOne({
       where: { id },
     });

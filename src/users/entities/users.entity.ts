@@ -37,6 +37,9 @@ export class User {
   @Column({ nullable: true })
   calendly: string;
 
+  @Column({ nullable: true })
+  wallet: string;
+
   @Column()
   phone: string;
 

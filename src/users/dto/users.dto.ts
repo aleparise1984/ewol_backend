@@ -43,6 +43,12 @@ export class CreateUserDto {
   @Column()
   phone: string;
 
+  @Column()
+  calendly: string;
+
+  @Column()
+  wallet: string;
+
   @IsString()
   @IsLowercase()
   @Column({
