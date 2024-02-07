@@ -3,12 +3,14 @@ import { CreateUserUserDto } from "./dto/user-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserUser } from "./entities/user-user.entity";
 import { Repository } from "typeorm";
+import { MailService } from "src/mailer/mailer.service";
 
 @Injectable()
 export class UserUserService {
   constructor(
     @InjectRepository(UserUser)
-    private readonly userUserRepository: Repository<UserUser>
+    private readonly userUserRepository: Repository<UserUser>,
+    private mailService: MailService
   ) {}
   async create(payload: CreateUserUserDto) {
     const userUser = await this.userUserRepository.findOne({
@@ -22,7 +24,11 @@ export class UserUserService {
     if (userUser) {
       throw new Error("User already exists");
     }
-    return await this.userUserRepository.save(payload);
+
+    await this.userUserRepository.save(payload);
+    await this.mailService.SendInversorInvertIntoCandidate();
+
+    return "UserUser created successfully";
   }
 
   async findAll(id: number) {

@@ -9,13 +9,10 @@ import { User } from "./../users/entities/users.entity";
 export class MailService {
   constructor(
     private readonly mailerService: MailerService,
-    @Inject(forwardRef(() => UsersService))
-    private readonly userService: UsersService
+    
   ) {}
 
   async sendUserConfirmation(user: User, token: string) {
-    console.log("entro en el mailer service");
-    console.log("node_env", process.env.NODE_ENV);
     const url =
       process.env.NODE_ENV === "prod"
         ? `https://ewol-academy-backoffice.vercel.app/auth/confirm-email/${token}`
@@ -72,6 +69,29 @@ export class MailService {
         name: user.full_name,
         url,
       },
+      attachments: [
+        {
+          filename: "Screenshot%202022-11-07%20at%2015.29.13.png",
+          path: "https://storage.googleapis.com/evaluados-files-1/Ewol%20Academy.png",
+        },
+      ],
+    });
+  }
+
+  async SendInversorInvertIntoCandidate() {
+    await this.mailerService.sendMail({
+      from: '"No Reply" <hola@ewol.academy>',
+      to: "hola@ewol.academy",
+      subject: `Hola, ha habido un match entre un inversor y un candidato !`,
+      template: join(
+        process.cwd(),
+        "dist",
+        "mailer",
+        "templates",
+        "investorAndCandidateMatch.hbs"
+      ),
+
+      context: {},
       attachments: [
         {
           filename: "Screenshot%202022-11-07%20at%2015.29.13.png",

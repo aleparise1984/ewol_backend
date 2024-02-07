@@ -6,9 +6,11 @@ import { UserUser } from "./entities/user-user.entity";
 import { User } from "src/users/entities/users.entity";
 import { Student } from "src/students/entities/student.entity";
 
+import { MailService } from "src/mailer/mailer.service";
+
 @Module({
   imports: [TypeOrmModule.forFeature([UserUser, User, Student])],
   controllers: [UserUserController],
-  providers: [UserUserService],
+  providers: [UserUserService, MailService],
 })
 export class UserUserModule {}
